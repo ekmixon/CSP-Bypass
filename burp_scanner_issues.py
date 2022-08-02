@@ -146,7 +146,7 @@ class WildcardContentSource(BaseCSPIssue):
     """
 
     def getIssueName(self):
-        return "Wildcard Content Source: %s" % self._directive
+        return f"Wildcard Content Source: {self._directive}"
 
     def getIssueDetail(self):
         return "The %s CSP directive does not enforce any restrictions on what \
@@ -163,7 +163,7 @@ class WildcardSubdomainContentSource(BaseCSPIssue):
     """
 
     def getIssueName(self):
-        return "Wildcard Subdomain Content Source: %s" % self._directive
+        return f"Wildcard Subdomain Content Source: {self._directive}"
 
     def getIssueDetail(self):
         return "Wildcard subdomains expose additional attack surface, since an \
@@ -179,7 +179,7 @@ class UnsafeContentSource(BaseCSPIssue):
     """ Any directive that allows unsafe content (e.g. 'unsafe-eval') """
 
     def getIssueName(self):
-        return "Unsafe Content Source: %s" % self._directive
+        return f"Unsafe Content Source: {self._directive}"
 
     def getIssueDetail(self):
         return "This content security policy allows for unsafe content sources"
@@ -195,7 +195,7 @@ class InsecureContentDirective(BaseCSPIssue):
     """
 
     def getIssueName(self):
-        return "Insecure Content Source: %s" % self._directive
+        return f"Insecure Content Source: {self._directive}"
 
     def getIssueDetail(self):
         return "The content directive %s allows resources to be loaded over \
@@ -214,7 +214,7 @@ class MissingDirective(BaseCSPIssue):
     """
 
     def getIssueName(self):
-        return "Missing CSP Directive: %s" % self._directive
+        return f"Missing CSP Directive: {self._directive}"
 
     def getIssueDetail(self):
         return "The %s content directive does not fallback to default-src, if \
@@ -222,7 +222,7 @@ class MissingDirective(BaseCSPIssue):
         open." % self._directive
 
     def getRemediationDetail(self):
-        return "Explicitly set a %s directive in your content policy." % self._directive
+        return f"Explicitly set a {self._directive} directive in your content policy."
 
 
 class WeakDefaultSource(BaseCSPIssue):
@@ -306,7 +306,7 @@ class KnownCSPBypass(BaseCSPIssue):
         self._bypass = bypass
 
     def getIssueName(self):
-        return "Known CSP Bypass: %s" % self._directive
+        return f"Known CSP Bypass: {self._directive}"
 
     def getIssueDetail(self):
         return "A known bypass exists in the '%s' directive for the domain \

@@ -168,5 +168,4 @@ class ContentSecurityPolicy(object):
             return item in self._content_policies
 
     def __iter__(self):
-        for key in self.CONTENT_DIRECTIVES:
-            yield key
+        yield from self.CONTENT_DIRECTIVES

@@ -80,10 +80,7 @@ class ContentSecurityPolicyScan(IScannerCheck):
         <code>0</code> to report both issues
         <code>1</code> to report the new issue only
         """
-        if existingIssue.getIssueName() == newIssue.getIssueName():
-            return -1
-        else:
-            return 0
+        return -1 if existingIssue.getIssueName() == newIssue.getIssueName() else 0
 
     def proccessHttpResponse(self, burpHttpReqResp):
         """ Processes only the HTTP repsonses with a CSP header """
@@ -179,7 +176,7 @@ class ContentSecurityPolicyScan(IScannerCheck):
                 continue
             # This check is a little hacky but should work well
             # the shortest subdomain string should be like *.a.bc
-            if any("*" in src and 5 <= len(src) for src in sources):
+            if any("*" in src and len(src) >= 5 for src in sources):
                 wilcardSubdomain = WildcardSubdomainContentSource(
                     httpService=burpHttpReqResp.getHttpService(),
                     url=self._getUrl(burpHttpReqResp),
@@ -277,15 +274,15 @@ class ContentSecurityPolicyScan(IScannerCheck):
 
     def _createBypassIssue(self, directive, bypass, burpHttpReqResp):
         """ Creates the KnownCSPBypass issue object """
-        knownBypass = KnownCSPBypass(
+        return KnownCSPBypass(
             httpService=burpHttpReqResp.getHttpService(),
             url=self._getUrl(burpHttpReqResp),
             httpMessages=burpHttpReqResp,
             severity="High",
             confidence="Certain",
             directive=directive,
-            bypass=bypass)
-        return knownBypass
+            bypass=bypass,
+        )
 
     def _bypassCheckDirective(self, csp, directive, knownBypasses):
         """
@@ -299,9 +296,12 @@ class ContentSecurityPolicyScan(IScannerCheck):
 
             # Iterate over all bypasses and check if `src' allows loading
             # content from `domain' if so, we have a bypass!
-            for domain, payload in knownBypasses:
-                if csp_match_domains(src, domain):
-                    bypasses.append((domain, payload,))
+            bypasses.extend(
+                (domain, payload)
+                for domain, payload in knownBypasses
+                if csp_match_domains(src, domain)
+            )
+
         return bypasses
 
 
